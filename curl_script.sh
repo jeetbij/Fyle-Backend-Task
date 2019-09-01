@@ -20,7 +20,7 @@ echo "token: $token"
 echo
 IFSC="ABHY0065052"
 echo "Getting bank detail with IFSC Code $IFSC"
-ifsc_res=`curl -G -s -X GET "$BASE_URL/bank/" -H "accept: application/json" --data-urlencode "ifsc=$IFSC" -H "Authorization: JWT $token"`
+ifsc_res=`curl -G -s -X GET "$BASE_URL/bank/?ifsc=$IFSC" -H "accept: application/json" -H "Authorization: JWT $token"`
 
 echo $ifsc_res | python -m json.tool
 
@@ -29,11 +29,10 @@ echo
 # Sample values for limit, offset, bank, city
 limit=10
 offset=0
-bank="ALLAHABAD BANK"
+bank="ALLAHABAD%20BANK"
 city="DELHI"
-name_and_city_res=`curl -G -s -X GET "$BASE_URL/bank/" -H "accept: application/json" \
-                            --data-urlencode "bank_name=$bank" --data-urlencode "city=$city" \
-                            --data-urlencode "offset=$offset" --data-urlencode "limit=$limit" \
+
+name_and_city_res=`curl -G -s -X GET "$BASE_URL/bank/?bank_name=$bank&city=$city&offset=$offset&limit=$limit" -H "accept: application/json" \
                             -H "Authorization: JWT $token"`
 
 echo "\n Searching with following data: limit=$limit offset=$offset bank=$bank city=$city\n"
@@ -43,8 +42,10 @@ echo
 
 offset=5
 echo "\n Now offset is 5. Data: limit=$limit offset=$offset bank=$bank city=$city\n"
-name_and_city_res=`curl -G -s -X GET "$BASE_URL/bank/" -H "accept: application/json" \
-                            --data-urlencode "bank_name=$bank" --data-urlencode "city=$city" \
-                            --data-urlencode "offset=$offset" --data-urlencode "limit=$limit" \
+name_and_city_res=`curl -G -s -X GET "$BASE_URL/bank/?bank_name=$bank&city=$city&offset=$offset&limit=$limit" -H "accept: application/json" \
                             -H "Authorization: JWT $token"`
+# name_and_city_res=`curl -G -s -X GET "$BASE_URL/bank/" -H "accept: application/json" \
+#                             --data-urlencode "bank_name=$bank" --data-urlencode "city=$city" \
+#                             --data-urlencode "offset=$offset" --data-urlencode "limit=$limit" \
+#                             -H "Authorization: JWT $token"`
 echo $name_and_city_res | python -m json.tool
